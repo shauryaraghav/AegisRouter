@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Safe Route</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+
+<body>
+
+<h2> AI Route Safety Agent : AGENISROUTE</h2>
+
+<div class="controls">
+
+    <div>
+        <label>Hour</label>
+        <input type="range" id="hour" min="0" max="23" value="18"
+               oninput="updateHour(this.value)">
+        <div id="hourValue">18:00</div>
+    </div>
+
+    <div>
+        <label>Weather</label>
+        <select id="weather">
+            <option value="clear">☀️ Clear</option>
+            <option value="cloudy">☁️ Cloudy</option>
+            <option value="rain">🌧 Rain</option>
+            <option value="heavy_rain">🌧🌧 Heavy Rain</option>
+            <option value="thunderstorm">⛈ Thunderstorm</option>
+            <option value="fog">🌫 Fog</option>
+            <option value="snow">❄️ Snow</option>
+            <option value="wind">💨 Windy</option>
+        </select>
+    </div>
+
+</div>
+
+<p class="info">Click Start & End Points</p>
+
+<div id="map"></div>
+
+<button onclick="getRoute()">Find Safest Route</button>
+
+<div class="output" id="output">
+    Waiting for route...
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+let map = L.map('map').setView([51.51, -0.13], 12);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+let start = null;
+let end = null;
+let routeLine = null;
+
+function updateHour(val) {
+    document.getElementById("hourValue").innerText = val + ":00";
+}
+
+map.on('click', function(e) {
+
+    if (!start) {
+        start = [e.latlng.lat, e.latlng.lng];
+        L.marker(start).addTo(map).bindPopup("Start");
+
+    } else if (!end) {
+        end = [e.latlng.lat, e.latlng.lng];
+        L.marker(end).addTo(map).bindPopup("End");
+    }
+});
+
+async function getRoute() {
+
+    if (!start || !end) {
+        alert("Select start & end!");
+        return;
+    }
+
+    const res = await fetch("/route", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            start,
+            end,
+            hour: document.getElementById("hour").value,
+            weather: document.getElementById("weather").value
+        })
+    });
+
+    const data = await res.json();
+
+    if (routeLine) map.removeLayer(routeLine);
+
+    const latlngs = data.path_coords.map(c => [c[0], c[1]]);
+    routeLine = L.polyline(latlngs, {color: 'lime', weight: 5}).addTo(map);
+
+    let risk = data.score.total_risk;
+    let riskClass = "safe";
+
+    if (risk > 60) riskClass = "danger";
+    else if (risk > 30) riskClass = "medium";
+
+    document.getElementById("output").innerHTML = `
+        <div class="risk ${riskClass}">Risk: ${risk}%</div>
+        <p>${data.explanation}</p>
+    `;
+}
+</script>
+
+</body>
+</html>

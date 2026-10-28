@@ -1,0 +1,7 @@
+flask
+networkx
+pandas
+numpy
+scipy
+requests
+pyngrok

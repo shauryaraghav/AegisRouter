@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+    color: white;
+    text-align: center;
+}
+
+h2 {
+    margin-top: 15px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 15px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    width: 90%;
+    margin: auto;
+}
+
+label {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+input[type=range] {
+    width: 150px;
+}
+
+select {
+    padding: 6px;
+    border-radius: 8px;
+    border: none;
+}
+
+#map {
+    height: 500px;
+    width: 90%;
+    margin: 20px auto;
+    border-radius: 15px;
+}
+
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    background: #4CAF50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+.output {
+    width: 90%;
+    margin: 10px auto;
+    padding: 15px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.05);
+}
+
+.risk {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.safe { color: #4CAF50; }
+.medium { color: #FFC107; }
+.danger { color: #F44336; }
+
+.info {
+    margin-top: 10px;
+    opacity: 0.8;
+}

@@ -1,0 +1,22 @@
+# --- Python cache ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Environment variables ---
+.env
+
+# --- Large / local data (VERY IMPORTANT) ---
+data/
+data_backup/
+*.pkl
+*.csv
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+
+# --- IDE ---
+.vscode/
+.idea/
