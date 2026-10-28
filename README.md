@@ -264,7 +264,7 @@ EXPLAIN → Generate reasoning
 
 ##  Author
 
-**Shreya Raghav**
+**Shreya Raghav and Shaurya Raghav**
 
 ---
 
